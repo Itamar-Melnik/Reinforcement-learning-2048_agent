@@ -65,10 +65,6 @@ The agent demonstrates significant mastery over the game mechanics:
 - **High-Tier Performance:** Frequent reaching of 2048 and occasional 8192 tiles
 - **Convergence:** Clear improvement over random play, showing stable learning and effective "corner strategy" development
 
-## 🎓 Status
-
-- **Academic Project:** Reinforcement Learning course assignment (2026)
-- **Portfolio Piece:** Demonstrating practical implementation of Deep RL techniques
 
 ## 💡 Key Learnings
 
@@ -76,16 +72,3 @@ The agent demonstrates significant mastery over the game mechanics:
 - The impact of Dueling architectures on reducing Q-value overestimation
 - Designing Reward Shaping to encourage tile merging and board organization
 
-## 📄 License
-
-This project is available for educational purposes.
-
-## 👤 Author
-
-**Itamar Melnik**
-
-- GitHub: [@Itamar-Melnik](https://github.com/Itamar-Melnik)
-
----
-
-*Feel free to explore, learn, and provide feedback! 🚀*
