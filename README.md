@@ -1,87 +1,91 @@
-Reinforcement Learning Agent for 2048 Game
+# 🎮 Reinforcement Learning Agent for 2048 Game
+
 Implementation of an advanced Deep Q-Learning agent trained to play the classic 2048 puzzle game. The agent learns optimal strategies through trial-and-error to maximize scores and reach high-value tiles (2048, 4096, and beyond).
 
-🧠 What's Inside
-2048_RL.ipynb Main Jupyter Notebook with the complete implementation:
+## 🧠 What's Inside
 
-Custom 2048 Environment: Board logic, move execution, tile merging, and custom reward design.
+- **`2048_RL.ipynb`** - Main Jupyter Notebook with the complete implementation:
+  - Custom 2048 Environment: Board logic, move execution, tile merging, and custom reward design
+  - Dueling Double DQN (D3QN): Advanced neural network architecture to decouple state-value and advantage functions
+  - Prioritized Experience Replay (PER): Efficient learning by focusing on significant game transitions
+  - Training & Evaluation: Epsilon-greedy exploration with decay, score tracking, and performance visualization
 
-Dueling Double DQN (D3QN): Advanced neural network architecture to decouple state-value and advantage functions.
+- **`דוח למידת חיזוקים.pdf`** - Detailed project report in Hebrew covering:
+  - Methodology: Technical deep dive into D3QN, state representation, and reward functions
+  - Experiments: Hyperparameter tuning (Learning Rates, Batch Sizes)
+  - Results: Comparative analysis and conclusions
 
-Prioritized Experience Replay (PER): Efficient learning by focusing on significant game transitions.
+- **`models/`** - Directory containing pre-trained model checkpoints (`.pkl` files) managed via Git LFS
 
-Training & Evaluation: Epsilon-greedy exploration with decay, score tracking, and performance visualization.
+- **`requirements.txt`** - Required Python packages (numpy, torch/tensorflow, matplotlib, etc.)
 
-דוח למידת חיזוקים .pdf Detailed project report in Hebrew covering:
+## 🎯 Project Goal
 
-Methodology: Technical deep dive into D3QN, state representation, and reward functions.
-
-Experiments: Hyperparameter tuning (Learning Rates, Batch Sizes).
-
-Results: Comparative analysis and conclusions.
-
-models/ Directory containing pre-trained model checkpoints (.pkl files) managed via Git LFS.
-
-requirements.txt Required Python packages (numpy, torch/tensorflow, matplotlib, etc.).
-
-🎯 Project Goal
 Demonstrate core reinforcement learning concepts in a stochastic, discrete environment:
 
-Implement a robust D3QN architecture from scratch.
+- Implement a robust D3QN architecture from scratch
+- Handle a large state space efficiently using neural network approximation
+- Optimize hyperparameters to achieve consistent high-tier performance
+- Analyze agent improvement over random play and training convergence
 
-Handle a large state space efficiently using neural network approximation.
+## 🛠 Technologies
 
-Optimize hyperparameters to achieve consistent high-tier performance.
+- Python & Jupyter Notebook
+- PyTorch / TensorFlow (Deep Learning framework)
+- NumPy (Board & math operations)
+- Matplotlib (Visualization of training progress & results)
+- Git LFS (Large File Storage for models)
 
-Analyze agent improvement over random play and training convergence.
+## 🚀 How to Run
 
-🛠 Technologies
-Python & Jupyter Notebook
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Itamar-Melnik/Reinforcement-learning-2048_agent.git
+   cd Reinforcement-learning-2048_agent
+   ```
 
-PyTorch / TensorFlow (Deep Learning framework)
+2. **Pull the models (Git LFS):**
+   ```bash
+   git lfs pull
+   ```
 
-NumPy (Board & math operations)
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Matplotlib (Visualization of training progress & results)
+4. **Run the Notebook:**
+   Open `2048_RL.ipynb` to train the agent or evaluate the pre-trained models.
 
-Git LFS (Large File Storage for models)
+## 📈 Key Results
 
-🚀 How to Run
-Clone the repository:
-
-Bash
-
-git clone https://github.com/Itamar-Melnik/Reinforcement-learning-2048_agent.git
-cd Reinforcement-learning-2048_agent
-Pull the models (Git LFS):
-
-Bash
-
-git lfs pull
-Install dependencies:
-
-Bash
-
-pip install -r requirements.txt
-Run the Notebook: Open 2048_RL.ipynb to train the agent or evaluate the pre-trained models.
-
-📈 Key Results
 The agent demonstrates significant mastery over the game mechanics:
 
-Best Configuration (LR=0.01): Achieved the 4096 tile in 68.4% of games.
+- **Best Configuration (LR=0.01):** Achieved the 4096 tile in 68.4% of games
+- **High-Tier Performance:** Frequent reaching of 2048 and occasional 8192 tiles
+- **Convergence:** Clear improvement over random play, showing stable learning and effective "corner strategy" development
 
-High-Tier Performance: Frequent reaching of 2048 and occasional 8192 tiles.
+## 🎓 Status
 
-Convergence: Clear improvement over random play, showing stable learning and effective "corner strategy" development.
+- **Academic Project:** Reinforcement Learning course assignment (2026)
+- **Portfolio Piece:** Demonstrating practical implementation of Deep RL techniques
 
-🎓 Status
-Academic Project: Reinforcement Learning course assignment (2026).
+## 💡 Key Learnings
 
-Portfolio Piece: Demonstrating practical implementation of Deep RL techniques.
+- Balancing Exploration vs. Exploitation in high-dimensional state spaces
+- The impact of Dueling architectures on reducing Q-value overestimation
+- Designing Reward Shaping to encourage tile merging and board organization
 
-💡 Key Learnings
-Balancing Exploration vs. Exploitation in high-dimensional state spaces.
+## 📄 License
 
-The impact of Dueling architectures on reducing Q-value overestimation.
+This project is available for educational purposes.
 
-Designing Reward Shaping to encourage tile merging and board organization.
+## 👤 Author
+
+**Itamar Melnik**
+
+- GitHub: [@Itamar-Melnik](https://github.com/Itamar-Melnik)
+
+---
+
+*Feel free to explore, learn, and provide feedback! 🚀*
