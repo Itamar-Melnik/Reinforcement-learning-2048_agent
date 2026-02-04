@@ -1,74 +1,280 @@
-# 🎮 Reinforcement Learning Agent for 2048 Game
+# Reinforcement Learning Agent for 2048
 
-Implementation of an advanced Deep Q-Learning agent trained to play the classic 2048 puzzle game. The agent learns optimal strategies through trial-and-error to maximize scores and reach high-value tiles (2048, 4096, and beyond).
+An academic implementation of classical Reinforcement Learning techniques for mastering the game **2048**, achieving tiles up to **8192** using efficient value-based methods — **without deep neural networks**.
 
-## 🧠 What's Inside
+This project demonstrates how careful problem formulation, feature engineering, and afterstate learning enable strong performance in a highly stochastic, large state-space environment.
 
-- **`2048_RL.ipynb`** - Main Jupyter Notebook with the complete implementation:
-  - Custom 2048 Environment: Board logic, move execution, tile merging, and custom reward design
-  - Dueling Double DQN (D3QN): Advanced neural network architecture to decouple state-value and advantage functions
-  - Prioritized Experience Replay (PER): Efficient learning by focusing on significant game transitions
-  - Training & Evaluation: Epsilon-greedy exploration with decay, score tracking, and performance visualization
+---
 
-- **`דוח למידת חיזוקים.pdf`** - Detailed project report in Hebrew covering:
-  - Methodology: Technical deep dive into D3QN, state representation, and reward functions
-  - Experiments: Hyperparameter tuning (Learning Rates, Batch Sizes)
-  - Results: Comparative analysis and conclusions
+## 🎮 Project Overview
 
-- **`models/`** - Directory containing pre-trained model checkpoints (`.pkl` files) managed via Git LFS
+The goal of this project is to train an autonomous agent to play the game 2048 using **Afterstate Value Learning**, **Temporal Difference (TD) learning**, and **N-tuple feature representations with symmetry exploitation**.
 
-- **`requirements.txt`** - Required Python packages (numpy, torch/tensorflow, matplotlib, etc.)
+Despite the enormous theoretical state space (~10²⁴), the agent achieves competitive performance through:
+- Compact state encoding
+- Local pattern-based value approximation
+- Variance reduction via afterstate evaluation
 
-## 🎯 Project Goal
+### Key Results
+- Maximum tile achieved: **8192**
+- Best average score: **62,704**
+- **72.4%** success rate reaching 2048
+- **68.4%** success rate reaching 4096
+- Trained using classical RL methods only (no deep learning)
 
-Demonstrate core reinforcement learning concepts in a stochastic, discrete environment:
+---
 
-- Implement a robust D3QN architecture from scratch
-- Handle a large state space efficiently using neural network approximation
-- Optimize hyperparameters to achieve consistent high-tier performance
-- Analyze agent improvement over random play and training convergence
+## 🧠 Methodology
 
-## 🛠 Technologies
+### Markov Decision Process (MDP)
 
-- Python & Jupyter Notebook
-- PyTorch / TensorFlow (Deep Learning framework)
-- NumPy (Board & math operations)
-- Matplotlib (Visualization of training progress & results)
-- Git LFS (Large File Storage for models)
+**State Space**  
+- 4×4 board, tiles encoded as `log₂(value)`  
+- Values range from 0 (empty) to 13 (8192)  
+- Logarithmic encoding enables efficient indexing and pattern matching
 
-## 🚀 How to Run
+**Action Space**  
+- Four actions: Up, Down, Left, Right  
+- Invalid moves (no board change) are filtered
 
-1. **Clone the repository:**
+**Reward Function**  
+- Reward equals the value of merged tiles  
+- Example: merging 2 + 2 → reward = 4
+
+**Environment Dynamics**
+- Deterministic: move and merge mechanics  
+- Stochastic: random tile insertion (90% = 2, 10% = 4)  
+- Terminal state: no valid actions available
+
+---
+
+## 🧮 Learning Algorithm
+
+### Afterstate Value Learning
+
+Instead of learning state values directly, the agent evaluates **afterstates** — board configurations immediately after the agent's action and before random tile placement.
+
+This separation:
+- Reduces variance in TD updates
+- Decouples agent decisions from environmental randomness
+- Improves learning stability in stochastic settings
+
+**TD(0) Update**
+```
+δ = r + γ · max V(s') − V(s)
+```
+- Discount factor γ = 1.0 (episodic task)
+
+---
+
+### N-tuple Feature Representation
+
+The value of an afterstate is approximated as a sum of local pattern values:
+
+- Rows (4 tiles each)
+- 2×2 squares
+- 2×3 rectangles
+- L-shaped corner patterns
+
+Each pattern is encoded using base-4 indexing over the log-scaled tiles.
+
+#### Symmetry Exploitation
+For each pattern, all **8 symmetric transformations** (rotations and reflections) are used:
+- Reduces effective parameter count
+- Improves generalization
+- Accelerates learning
+
+**Total parameters**: ~15.79 million (lookup tables)
+
+---
+
+### Policy & Exploration
+
+- ε-greedy policy
+- Initial ε = 0.5
+- Decay: ε × 0.995 per episode
+- Minimum ε = 0.001
+- Greedy action selected by maximizing afterstate value
+
+---
+
+## 🏗️ Project Structure
+
+```
+Reinforcement-learning-2048_agent/
+├── 2048_RL.ipynb              # Full implementation and experiments
+├── דוח למידת חיזוקים.pdf       # Academic report (Hebrew)
+├── models/                    # Trained agents (Git LFS)
+│   ├── agent_lr_0.0025.pkl
+│   ├── agent_lr_0.005.pkl
+│   ├── agent_lr_0.01.pkl
+│   └── agent_lr_0.05.pkl
+├── README.md
+├── requirements.txt
+└── .gitattributes
+```
+
+---
+
+## 🛠️ Technology Stack
+
+- **Python 3**
+- **NumPy**, **Pandas**
+- **Matplotlib**, **Seaborn**
+- **Numba** (JIT acceleration)
+- **Pygame** (interactive visualization)
+- **Jupyter Notebook**
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.x
+- Git with Git LFS support
+- pip package manager
+
+### Installation
+
+1. **Clone the repository**
    ```bash
    git clone https://github.com/Itamar-Melnik/Reinforcement-learning-2048_agent.git
    cd Reinforcement-learning-2048_agent
    ```
 
-2. **Pull the models (Git LFS):**
+2. **Install Git LFS** (if not already installed)
+   ```bash
+   git lfs install
+   ```
+
+3. **Pull LFS files** (trained models)
    ```bash
    git lfs pull
    ```
 
-3. **Install dependencies:**
+4. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the Notebook:**
-   Open `2048_RL.ipynb` to train the agent or evaluate the pre-trained models.
+5. **Launch Jupyter Notebook**
+   ```bash
+   jupyter notebook 2048_RL.ipynb
+   ```
 
-## 📈 Key Results
+---
 
-The agent demonstrates significant mastery over the game mechanics:
+## 🚀 Training Setup
 
-- **Best Configuration (LR=0.01):** Achieved the 4096 tile in 68.4% of games
-- **High-Tier Performance:** Frequent reaching of 2048 and occasional 8192 tiles
-- **Convergence:** Clear improvement over random play, showing stable learning and effective "corner strategy" development
+- **4 agents**, different learning rates
+- Learning rates tested: `0.0025, 0.005, 0.01, 0.05`
+- **50,000 episodes per agent**
+- ~6 hours training time per agent
+- Models stored using Git LFS (~63MB each)
 
+> Training was intentionally limited to 50K episodes; full convergence was not reached.
 
-## 💡 Key Learnings
+---
 
-- Balancing Exploration vs. Exploitation in high-dimensional state spaces
-- The impact of Dueling architectures on reducing Q-value overestimation
-- Designing Reward Shaping to encourage tile merging and board organization
+## 📊 Evaluation Protocol
 
+- **1,000 evaluation episodes**
+- Greedy policy (ε = 0)
+- Metrics:
+  - Average score
+  - Maximum tile achieved
+  - Success rates for ≥256, ≥512, ≥1024, ≥2048, ≥4096, ≥8192
+
+---
+
+## 📈 Results
+
+### Agent Performance Summary
+
+| Learning Rate | Avg Score | ≥2048 | ≥4096 | ≥8192 | Notes |
+|--------------|-----------|-------|-------|-------|------|
+| 0.0025 | 41,081 | 56.9% | 29.9% | 0.2% | Slow learning, under-trained |
+| **0.005** ⭐ | 53,691 | 55.5% | 53.7% | 1.8% | **Most stable and robust** |
+| **0.01** | **62,704** | **72.4%** | **68.4%** | **4.0%** | Highest performance, less robust |
+| 0.05 | 47,569 | 47.5% | 47.2% | 0.3% | Unstable, overly aggressive |
+
+---
+
+## 🔍 Learning Rate Analysis
+
+- **LR = 0.01** achieves the highest expected return by aggressively reinforcing high-reward trajectories.
+  - Excels in common late-game scenarios
+  - More sensitive to rare or adversarial board configurations under limited training
+
+- **LR = 0.005** demonstrates slower but more uniform value propagation.
+  - More robust across diverse game states
+  - Lower variance and fewer extreme failures
+  - Best trade-off for reliability under fixed training budget
+
+- **LR = 0.0025** requires substantially longer training to reach competitive performance.
+
+---
+
+## 📉 Convergence Assessment
+
+- TD error did not fully stabilize for high-performing agents.
+- Persistent TD activity suggests continued reshaping of the value function as agents increasingly encounter complex late-game states (4096+).
+- Extended training (200K+ episodes) or learning rate decay would likely improve stability and performance.
+
+---
+
+## 🔬 Feature Insights
+
+- Only ~12% of parameters were actively updated during training
+- 2×2 square patterns contributed most strongly to value estimation
+- Larger patterns (2×3) provided less marginal benefit
+- Symmetry exploitation significantly improved sample efficiency
+
+---
+
+## ⚠️ Limitations
+
+- No explicit robustness metric (e.g., CVaR or percentile-based scores)
+- No learning rate schedules or adaptive optimization
+- Training duration limited for computational reasons
+- Evaluation focused on maximum tile and mean performance
+
+---
+
+## 🎓 Academic Context
+
+This project was developed as part of academic coursework in Reinforcement Learning and serves as a reference implementation of classical value-based RL methods applied to a challenging stochastic environment.
+
+**Language Note**: Code and notebook are in English; academic report is in Hebrew.
+
+---
+
+## 📦 Models
+
+All trained models are stored using Git LFS:
+- Conservative, stable, and aggressive learning profiles included
+- Each model contains ~15.79M LUT parameters (~63MB file size)
+
+---
+
+## 📌 Key Takeaways
+
+1. Classical RL methods remain competitive with proper feature engineering
+2. Afterstate learning significantly reduces variance in stochastic domains
+3. Learning rate strongly affects robustness vs. peak performance
+4. Symmetry exploitation is critical for scalability
+5. Training time remains the dominant performance bottleneck
+
+---
+
+## 👥 Contributors
+
+Developed by Itamar Melnik as part of academic coursework in Reinforcement Learning.
+
+## 🔗 Repository
+
+[https://github.com/Itamar-Melnik/Reinforcement-learning-2048_agent](https://github.com/Itamar-Melnik/Reinforcement-learning-2048_agent)
+
+---
+
+**Status**: Academic project — archived for reference and educational purposes
