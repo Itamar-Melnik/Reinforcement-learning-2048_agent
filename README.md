@@ -267,9 +267,7 @@ All trained models are stored using Git LFS:
 
 ---
 
-## 👥 Contributors
 
-Developed by Itamar Melnik as part of academic coursework in Reinforcement Learning.
 
 ## 🔗 Repository
 
